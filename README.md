@@ -11,14 +11,14 @@
 - 零空间、列空间和行空间的一组基
 - PLU 分解
 - 精确特征多项式 `det(λI - A)`
-- 表格、推导步骤和 LaTeX 三种结果视图，以及 LaTeX 一键复制
+- MathJax 精确结果、单步/批量推导浏览，以及 LaTeX 一键复制
 - 深浅色主题、响应式布局和常用算例快捷入口
 
 伴随矩阵支持奇异矩阵。对于无穷多解，结果会给出一个特解和零空间基；基向量默认按列排列。
 
 ## 本地运行
 
-需要 Node.js 20 或更高版本。
+需要 Node.js `20.19+` 或 `22.12+`。
 
 ```bash
 npm install
@@ -49,11 +49,22 @@ npm run preview
 -3 2 -5
 ```
 
+## 界面与交互
+
+- 计算结果使用 MathJax 直接排版，右上角按钮可以复制完整 LaTeX 源码；
+- 存在行变换记录时，结果下方会直接显示推导区域，无需切换标签页；
+- 推导区域默认使用单步浏览：左侧选择步骤，右侧对照变换前后矩阵，并高亮本次发生变化的行；
+- 单步浏览支持第一步、上一步、下一步和最后一步，也可以使用 `←`、`→`、`Home`、`End`；
+- “全部展开”模式用于纵览推导，每批加载 16 步，并支持统一展开或收起；
+- 移动端会隐藏步骤侧栏，通过前后按钮浏览，并将两个矩阵改为上下排列；
+- 在任意矩阵输入框中按 `Ctrl + Enter` 或 `⌘ + Enter` 可以立即计算；
+- 深浅色主题会保存在浏览器本地，所有矩阵计算也都在本机完成。
+
 ## 架构
 
 ```text
 src/
-  components/    矩阵编辑器、运算台、结果、步骤与公式组件
+  components/    矩阵编辑器、运算台、结果、步骤浏览器与公式组件
   composables/   计算器状态、示例载入和主题状态
   core/          Rational、Matrix、输入解析和结构化错误
   algorithms/    基础运算、消元、求解、子空间、PLU 等
@@ -68,7 +79,7 @@ scripts/         Python 独立数学校验器
 
 前端使用 Vue 3、PrimeVue 和 Lucide 图标；界面采用“数学研习工作台”的视觉方向，并针对桌面和移动设备分别排版。计算视图模型不依赖 DOM，`core` 与 `algorithms` 也不依赖 Vue，因此界面状态和精确数学内核可以分别维护、测试。
 
-行变换记录存储为 `swap`、`scale` 和 `addMultiple` 事件，而不是中文字符串或每一步的完整矩阵副本。步骤面板按需回放这些事件，并默认只展开前 16 步，避免长推导阻塞页面。
+行变换记录存储为 `swap`、`scale` 和 `addMultiple` 事件，而不是中文字符串或每一步的完整矩阵副本。步骤面板默认只渲染当前步骤，并缓存少量矩阵快照；批量模式每次加载 16 步，避免长推导阻塞页面。
 
 ## 正确性验证
 
@@ -105,13 +116,15 @@ npm run verify:python
 - 奇异矩阵的余子式伴随计算目前限制为 8 阶；秩不超过 `n-2` 时会直接返回零伴随矩阵；
 - 精确分数的分子和分母可能快速增长，大矩阵仍可能较慢；
 - 特征值、QR 和 SVD 通常需要无理数、复数或浮点容差，暂未混入有理数内核；
-- MathJax 仍由 CDN 加载。离线时表格结果和 LaTeX 文本可用，但公式预览可能不可用。
+- MathJax 仍由 CDN 加载。离线时原始 LaTeX 文本和推导步骤矩阵可用，但排版后的结果公式可能不可用。
 
 ---
 
 # Matrix Calculator (Exact Rational Arithmetic)
 
 A frontend-only matrix calculator backed by exact `BigInt` rational arithmetic. It supports basic matrix operations, REF/RREF traces, linear systems, fundamental subspaces, PLU decomposition, and exact characteristic polynomials.
+
+The Vue 3 interface provides responsive light/dark themes, MathJax output, LaTeX copying, and focused or batch row-operation browsing with before/after matrix comparison.
 
 ## Quick start
 

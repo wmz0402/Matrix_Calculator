@@ -19,7 +19,7 @@ import {
 } from "../algorithms";
 import { Matrix, parseMatrix, Rational } from "../core";
 import { augmentedMatrixToLatex, matrixToLatex, polynomialToLatex, rationalToLatex } from "../format/latex";
-import type { CalculationInput, CalculationResult, MatrixDisplay } from "./types";
+import type { CalculationInput, CalculationResult } from "./types";
 
 function requireRightMatrix(text: string): Matrix {
   if (text.trim().length === 0) throw new Error("当前运算需要矩阵 B（或向量 b）");
@@ -40,7 +40,6 @@ function matrixResult(
     summary,
     formula: `${expression} = ${rendered}`,
     latex: `\\[\n${expression} = ${rendered}\n\\]`,
-    matrices: [{ caption: "计算结果", matrix, splitAfter }],
   };
 }
 
@@ -52,7 +51,6 @@ function scalarResult(title: string, value: Rational, expression: string): Calcu
     summary: `精确值为 ${value.toString()}`,
     formula: `${expression} = ${rendered}`,
     latex: `\\[\n${expression} = ${rendered}\n\\]`,
-    matrices: [],
   };
 }
 
@@ -69,7 +67,6 @@ function basisResult(
       summary: "维数为 0，基为空",
       formula: `${symbol} = \\{0\\}`,
       latex: `\\[\n${symbol} = \\{0\\}\n\\]`,
-      matrices: [],
     };
   }
   const rendered = matrixToLatex(result.basis);
@@ -80,7 +77,6 @@ function basisResult(
     summary: `维数为 ${result.dimension}，${layout}`,
     formula: `${symbol} = \\operatorname{span}\\left(${rendered}\\right),\\quad \\dim=${result.dimension}`,
     latex: `\\[\n${symbol} = \\operatorname{span}\\left(${rendered}\\right),\\quad \\dim=${result.dimension}\n\\]`,
-    matrices: [{ caption: `${title}基矩阵 · ${layout}`, matrix: result.basis }],
   };
 }
 
@@ -170,30 +166,29 @@ export function calculate(input: CalculationInput): CalculationResult {
     }
     if (result.kind === "inconsistent") {
       const columns = result.inconsistentRightHandSides.map((index) => index + 1).join("、");
+      const reduced = augmentedMatrixToLatex(result.rref, left.cols);
+      const formula = `\\begin{aligned}\\operatorname{RREF}(A|B)&=${reduced}\\\\&\\text{出现矛盾行，方程组无解}\\end{aligned}`;
       return {
         tone: "warning",
         title: "方程组不相容",
         summary: `右端第 ${columns} 列出现矛盾行，因此无解`,
-        formula: "\\text{系数全为零，而右端项非零}",
-        latex: "\\[\\text{方程组不相容，无解。}\\]",
-        matrices: [{ caption: "消元后的增广矩阵", matrix: result.rref, splitAfter: left.cols }],
+        formula,
+        latex: `\\[\n${formula}\n\\]`,
         trace: traceDisplay,
       };
     }
     const particular = matrixToLatex(result.particular);
     const basis = matrixToLatex(result.nullSpaceBasis);
     const unknown = right.cols === 1 ? "x" : "X";
-    const parameter = right.cols === 1 ? "t" : "C";
+    const particularSymbol = right.cols === 1 ? "x_p" : "X_p";
+    const parameter = right.cols === 1 ? "\\mathbf{t}" : "C";
+    const formula = `\\begin{aligned}${particularSymbol}&=${particular}\\\\N&=${basis}\\\\${unknown}&=${particularSymbol}+N${parameter}\\end{aligned}`;
     return {
       tone: "success",
       title: "方程组有无穷多解",
       summary: `${result.freeColumns.length} 个自由变量；通解由一个特解与零空间组成`,
-      formula: `${unknown} = ${particular} + ${basis}${parameter}`,
-      latex: `\\[\n${unknown} = ${particular} + ${basis}${parameter}\n\\]`,
-      matrices: [
-        { caption: "一个特解", matrix: result.particular },
-        { caption: "零空间基 · 每列一个基向量", matrix: result.nullSpaceBasis },
-      ],
+      formula,
+      latex: `\\[\n${formula}\n\\]`,
       trace: traceDisplay,
     };
   }
@@ -204,21 +199,16 @@ export function calculate(input: CalculationInput): CalculationResult {
 
   if (operation === "plu") {
     const result = plu(left);
-    const displays: readonly MatrixDisplay[] = [
-      { caption: "置换矩阵 P", matrix: result.permutation },
-      { caption: "下三角矩阵 L", matrix: result.lower },
-      { caption: "上三角矩阵 U", matrix: result.upper },
-    ];
     const p = matrixToLatex(result.permutation);
     const l = matrixToLatex(result.lower);
     const u = matrixToLatex(result.upper);
+    const formula = `\\begin{aligned}P&=${p}\\\\L&=${l}\\\\U&=${u}\\\\PA&=LU\\end{aligned}`;
     return {
       tone: result.singular ? "warning" : "success",
       title: "PLU 分解",
       summary: result.singular ? "矩阵奇异，但仍给出满足 PA = LU 的分解" : "分解满足 PA = LU",
-      formula: `P=${p},\\quad L=${l},\\quad U=${u}`,
-      latex: `\\[\nP=${p},\\quad L=${l},\\quad U=${u},\\qquad PA=LU\n\\]`,
-      matrices: displays,
+      formula,
+      latex: `\\[\n${formula}\n\\]`,
     };
   }
 
@@ -229,6 +219,5 @@ export function calculate(input: CalculationInput): CalculationResult {
     summary: "所有系数均保持有理数精确性",
     formula: `\\chi_A(\\lambda)=\\det(\\lambda I-A)=${polynomial}`,
     latex: `\\[\n\\chi_A(\\lambda)=\\det(\\lambda I-A)=${polynomial}\n\\]`,
-    matrices: [],
   };
 }

@@ -82,12 +82,12 @@ describe("Vue browser UI integration", () => {
     await runCalculation(app);
 
     expect(app.find(".result-surface h2").text()).toBe("方程组有唯一解");
-    const cells = app
-      .find(".matrix-result-card")
-      .findAll(".matrix-table td")
-      .map((cell) => cell.text());
-    expect(cells).toEqual(["2", "3", "-1"]);
-    expect(app.text()).toContain("推导步骤");
+    expect(app.find(".formula-stage").text()).toContain("2");
+    expect(app.find(".formula-stage").text()).toContain("-1");
+    expect(app.find(".matrix-result-card").exists()).toBe(false);
+    expect(app.find(".result-tabs").exists()).toBe(false);
+    expect(app.find(".result-derivation").exists()).toBe(true);
+    expect(app.find(".result-surface__actions").text()).toContain("复制 LaTeX 源码");
   });
 
   it("loads the inverse example and disables matrix B", async () => {
@@ -102,6 +102,35 @@ describe("Vue browser UI integration", () => {
 
     await runCalculation(app);
     expect(app.find(".result-surface h2").text()).toBe("逆矩阵");
+  });
+
+  it("navigates one derivation step at a time and can switch to bulk expansion", async () => {
+    const app = await mountApplication();
+    await runCalculation(app);
+
+    expect(app.find(".trace-navigator").exists()).toBe(true);
+    expect(app.findAll(".trace-step__comparison")).toHaveLength(1);
+    await app.find('button[aria-label="下一步"]').trigger("click");
+    await flushPromises();
+    expect(app.find(".trace-focus__controls").text()).toContain("2 /");
+    await app.find(".trace-navigator").trigger("keydown", { key: "ArrowRight" });
+    await flushPromises();
+    expect(app.find(".trace-focus__controls").text()).toContain("3 /");
+
+    const viewButtons = app.findAll(".trace-view-switch button");
+    expect(viewButtons[1]).toBeDefined();
+    await viewButtons[1]!.trigger("click");
+    await flushPromises();
+
+    const comparisons = app.findAll(".trace-step__comparison");
+    expect(comparisons.length).toBeGreaterThan(1);
+    expect(app.findAll(".trace-step__matrix--before")).toHaveLength(comparisons.length);
+    expect(app.findAll(".trace-step__matrix--after")).toHaveLength(comparisons.length);
+    expect(app.findAll(".matrix-table__row--highlight").length).toBeGreaterThan(0);
+
+    await app.find(".trace-collapse-all").trigger("click");
+    await flushPromises();
+    expect(app.findAll(".trace-step__comparison")).toHaveLength(0);
   });
 
   it("shows a clear validation error for an empty matrix", async () => {

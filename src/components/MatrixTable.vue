@@ -4,6 +4,7 @@ import type { Matrix } from "../core";
 defineProps<{
   matrix: Matrix;
   splitAfter?: number;
+  highlightRows?: readonly number[];
   label?: string;
 }>();
 </script>
@@ -15,7 +16,11 @@ defineProps<{
       <table class="matrix-table">
         <caption class="sr-only">{{ label ?? '矩阵' }}，{{ matrix.rows }} 行 {{ matrix.cols }} 列</caption>
         <tbody>
-          <tr v-for="row in matrix.rows" :key="row">
+          <tr
+            v-for="row in matrix.rows"
+            :key="row"
+            :class="{ 'matrix-table__row--highlight': highlightRows?.includes(row - 1) }"
+          >
             <td
               v-for="col in matrix.cols"
               :key="col"

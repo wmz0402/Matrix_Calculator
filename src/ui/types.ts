@@ -86,12 +86,6 @@ export function getOperationOption(operation: Operation): OperationOption {
   return option;
 }
 
-export interface MatrixDisplay {
-  readonly caption: string;
-  readonly matrix: Matrix;
-  readonly splitAfter?: number;
-}
-
 export interface TraceDisplay {
   readonly initial: Matrix;
   readonly operations: readonly RowOperation[];
@@ -105,7 +99,6 @@ export interface CalculationResult {
   readonly summary: string;
   readonly formula: string;
   readonly latex: string;
-  readonly matrices: readonly MatrixDisplay[];
   readonly trace?: TraceDisplay;
 }
 

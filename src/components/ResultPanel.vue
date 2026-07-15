@@ -1,17 +1,10 @@
 <script setup lang="ts">
-import { ref, watch } from "vue";
 import Button from "primevue/button";
 import Message from "primevue/message";
-import Tab from "primevue/tab";
-import TabList from "primevue/tablist";
-import TabPanel from "primevue/tabpanel";
-import TabPanels from "primevue/tabpanels";
-import Tabs from "primevue/tabs";
 import Tag from "primevue/tag";
-import { Check, Clipboard, ClipboardCheck, Code2, FlaskConical, Sigma, TriangleAlert } from "lucide-vue-next";
+import { Check, Clipboard, ClipboardCheck, Sigma, TriangleAlert } from "lucide-vue-next";
 import type { CalculationResult } from "../ui/types";
 import FormulaBlock from "./FormulaBlock.vue";
-import MatrixTable from "./MatrixTable.vue";
 import TracePanel from "./TracePanel.vue";
 
 const props = defineProps<{
@@ -21,14 +14,6 @@ const props = defineProps<{
 }>();
 
 defineEmits<{ copy: [] }>();
-const activeTab = ref("result");
-
-watch(
-  () => props.result,
-  () => {
-    activeTab.value = "result";
-  },
-);
 </script>
 
 <template>
@@ -57,46 +42,21 @@ watch(
           <Button severity="secondary" outlined @click="$emit('copy')">
             <ClipboardCheck v-if="copyState === 'copied'" :size="16" />
             <Clipboard v-else :size="16" />
-            <span>{{ copyState === 'copied' ? '已复制' : copyState === 'failed' ? '复制失败' : '复制 LaTeX' }}</span>
+            <span>{{ copyState === 'copied' ? '已复制' : copyState === 'failed' ? '复制失败' : '复制 LaTeX 源码' }}</span>
           </Button>
         </div>
       </header>
 
-      <Tabs v-model:value="activeTab" class="result-tabs">
-        <TabList>
-          <Tab value="result"><Sigma :size="16" />结果</Tab>
-          <Tab v-if="result.trace" value="steps"><FlaskConical :size="16" />推导步骤 <span class="tab-count">{{ result.trace.operations.length }}</span></Tab>
-          <Tab value="latex"><Code2 :size="16" />LaTeX</Tab>
-        </TabList>
-        <TabPanels>
-          <TabPanel value="result">
-            <div class="formula-stage"><FormulaBlock :latex="result.formula" /></div>
-            <div v-if="result.matrices.length" :class="['matrix-results-grid', { 'matrix-results-grid--triple': result.matrices.length === 3 }]">
-              <article v-for="item in result.matrices" :key="item.caption" class="matrix-result-card">
-                <div class="matrix-result-card__head">
-                  <span>{{ item.caption }}</span>
-                  <small>{{ item.matrix.rows }} × {{ item.matrix.cols }}</small>
-                </div>
-                <MatrixTable :matrix="item.matrix" :split-after="item.splitAfter" :label="item.caption" />
-              </article>
-            </div>
-          </TabPanel>
-          <TabPanel v-if="result.trace" value="steps">
-            <TracePanel :trace="result.trace" />
-          </TabPanel>
-          <TabPanel value="latex">
-            <div class="latex-panel">
-              <div class="latex-panel__head"><Code2 :size="16" /><span>可直接粘贴到支持 LaTeX 的编辑器</span></div>
-              <pre>{{ result.latex }}</pre>
-              <Button severity="secondary" outlined @click="$emit('copy')">
-                <ClipboardCheck v-if="copyState === 'copied'" :size="16" />
-                <Clipboard v-else :size="16" />
-                {{ copyState === 'copied' ? '已复制到剪贴板' : '复制完整代码' }}
-              </Button>
-            </div>
-          </TabPanel>
-        </TabPanels>
-      </Tabs>
+      <div class="result-surface__body">
+        <section class="result-primary" aria-labelledby="exact-result-title">
+          <div class="result-block-label"><Sigma :size="15" /><span id="exact-result-title">精确结果</span></div>
+          <div class="formula-stage"><FormulaBlock :latex="result.formula" /></div>
+        </section>
+
+        <section v-if="result.trace" class="result-derivation" aria-label="推导步骤">
+          <TracePanel :trace="result.trace" />
+        </section>
+      </div>
     </div>
 
     <div v-else-if="!error" class="result-empty">
