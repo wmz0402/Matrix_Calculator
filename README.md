@@ -11,7 +11,8 @@
 - 零空间、列空间和行空间的一组基
 - PLU 分解
 - 精确特征多项式 `det(λI - A)`
-- Markdown + LaTeX 结果展示和 LaTeX 复制
+- 表格、推导步骤和 LaTeX 三种结果视图，以及 LaTeX 一键复制
+- 深浅色主题、响应式布局和常用算例快捷入口
 
 伴随矩阵支持奇异矩阵。对于无穷多解，结果会给出一个特解和零空间基；基向量默认按列排列。
 
@@ -52,18 +53,22 @@ npm run preview
 
 ```text
 src/
+  components/    矩阵编辑器、运算台、结果、步骤与公式组件
+  composables/   计算器状态、示例载入和主题状态
   core/          Rational、Matrix、输入解析和结构化错误
   algorithms/    基础运算、消元、求解、子空间、PLU 等
   format/        LaTeX 格式化
-  ui/            当前 DOM 结果适配层
-  main.ts        页面控制器
+  ui/            运算元数据、示例和纯计算视图模型
+  App.vue        页面布局与键盘交互
+  theme.ts       PrimeVue Aura 语义主题
+  main.ts        Vue 应用入口
 tests/           单元、性质和页面集成测试
 scripts/         Python 独立数学校验器
 ```
 
-数学模块不依赖 DOM。以后迁移 React、Vue 或其他前端框架时，可以保留整个 `core` 和 `algorithms` 层。
+前端使用 Vue 3、PrimeVue 和 Lucide 图标；界面采用“数学研习工作台”的视觉方向，并针对桌面和移动设备分别排版。计算视图模型不依赖 DOM，`core` 与 `algorithms` 也不依赖 Vue，因此界面状态和精确数学内核可以分别维护、测试。
 
-行变换记录存储为 `swap`、`scale` 和 `addMultiple` 事件，而不是中文字符串或每一步的完整矩阵副本。UI 可以按需回放这些事件并渲染步骤。
+行变换记录存储为 `swap`、`scale` 和 `addMultiple` 事件，而不是中文字符串或每一步的完整矩阵副本。步骤面板按需回放这些事件，并默认只展开前 16 步，避免长推导阻塞页面。
 
 ## 正确性验证
 
@@ -74,7 +79,7 @@ npm run typecheck
 npm test
 ```
 
-测试包括固定用例、边界条件、随机性质测试和页面控件集成测试，验证内容包括：
+测试包括固定用例、边界条件、随机性质测试、纯视图模型测试和 Vue 页面集成测试，验证内容包括：
 
 - `RREF(RREF(A)) = RREF(A)`；
 - `det(AB) = det(A)det(B)`；

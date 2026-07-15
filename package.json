@@ -5,21 +5,30 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc --noEmit && vite build",
+    "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "vue-tsc --noEmit",
     "verify:python": "tsx scripts/cross-check.ts"
   },
   "devDependencies": {
     "@types/node": "^26.1.1",
+    "@vitejs/plugin-vue": "^6.0.8",
     "@vitest/coverage-v8": "^4.1.10",
+    "@vue/test-utils": "^2.4.11",
     "fast-check": "^4.9.0",
     "jsdom": "^29.1.1",
     "tsx": "^4.23.1",
-    "typescript": "^7.0.2",
+    "typescript": "^5.9.3",
     "vite": "^8.1.4",
-    "vitest": "^4.1.10"
+    "vitest": "^4.1.10",
+    "vue-tsc": "^3.3.7"
+  },
+  "dependencies": {
+    "@primeuix/themes": "^2.0.3",
+    "lucide-vue-next": "^0.577.0",
+    "primevue": "^4.5.5",
+    "vue": "^3.5.39"
   }
 }
