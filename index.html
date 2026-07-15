@@ -30,7 +30,7 @@
 2 1 0
 -3 2 -5"></textarea>
         </div>
-        <div class="field">
+        <div class="field" id="matrixBWrap">
           <label for="matrixB">矩阵 B / 向量 b</label>
           <textarea id="matrixB" placeholder="示例：
 1
@@ -47,14 +47,21 @@
             <option value="sub">A - B</option>
             <option value="mul">A × B</option>
             <option value="transpose">Aᵀ</option>
+            <option value="trace">tr(A)</option>
             <option value="det">det(A)</option>
             <option value="inv">A⁻¹</option>
             <option value="adj">adj(A)</option>
             <option value="rank">rank(A)</option>
+            <option value="ref">A 的行阶梯形（REF）</option>
             <option value="rref">A 的行最简式</option>
             <option value="rref_aug">增广矩阵 (A|B) 的行最简式</option>
             <option value="pow">A^n</option>
             <option value="solve">解 A x = b</option>
+            <option value="nullspace">零空间的一组基</option>
+            <option value="colspace">列空间的一组基</option>
+            <option value="rowspace">行空间的一组基</option>
+            <option value="plu">PLU 分解</option>
+            <option value="charpoly">特征多项式</option>
           </select>
         </div>
         <div class="control" id="powerWrap">
@@ -93,6 +100,6 @@
     };
   </script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-  <script src="app.js"></script>
+  <script type="module" src="/src/main.ts"></script>
 </body>
 </html>

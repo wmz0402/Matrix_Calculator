@@ -102,6 +102,18 @@ body {
   margin-bottom: 6px;
 }
 
+.field {
+  transition: opacity 0.2s ease;
+}
+
+.field-muted {
+  opacity: 0.48;
+}
+
+.field-muted textarea {
+  cursor: not-allowed;
+}
+
 textarea {
   width: 100%;
   min-height: 180px;
@@ -177,6 +189,21 @@ input {
   gap: 12px;
 }
 
+.result-summary,
+.matrix-caption {
+  font-weight: 700;
+}
+
+.matrix-result {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.matrix-caption {
+  margin-top: 8px;
+  color: var(--muted);
+}
+
 .result-render {
   margin-top: 10px;
   padding: 10px 14px;
@@ -194,6 +221,10 @@ input {
   color: #a2341f;
   font-weight: 700;
   margin-bottom: 8px;
+}
+
+.copy-error {
+  color: #a2341f;
 }
 
 .matrix {
