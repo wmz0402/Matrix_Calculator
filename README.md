@@ -34,6 +34,26 @@ npm run build
 npm run preview
 ```
 
+## 部署到 GitHub Pages
+
+仓库包含 `.github/workflows/deploy.yml`，推送到默认分支后会自动构建并部署 `dist`。工作流通过 GitHub Pages 提供的 `base_path` 动态设置 Vite 的资源路径，因此 fork 后即使修改仓库名、默认分支或配置自定义域名，也不需要手动修改 `vite.config.ts`。
+
+首次部署需要在 GitHub 仓库中完成一次设置：
+
+```text
+Settings → Pages → Build and deployment → Source → GitHub Actions
+```
+
+之后可以在 `Actions → Deploy to GitHub Pages` 查看部署进度，也可以通过 `workflow_dispatch` 手动选择分支部署。fork 用户需要先在自己的仓库中启用 GitHub Actions，并单独完成上述 Pages 设置。
+
+默认情况下，项目仓库会部署到：
+
+```text
+https://<用户名>.github.io/<仓库名>/
+```
+
+如果仓库名为 `<用户名>.github.io` 或使用自定义域名，工作流会自动使用根路径 `/`。
+
 ## 输入格式
 
 - 行使用换行或分号分隔；
