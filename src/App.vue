@@ -6,6 +6,7 @@ import { ArrowUpRight, BookOpen, Github, Grid2X2, Moon, ShieldCheck, Sparkles, S
 import MatrixEditor from "./components/MatrixEditor.vue";
 import OperationPanel from "./components/OperationPanel.vue";
 import ResultPanel from "./components/ResultPanel.vue";
+import BrandIcon from "./components/BrandIcon.vue";
 import { useCalculator } from "./composables/useCalculator";
 import { useTheme } from "./composables/useTheme";
 import { CALCULATOR_EXAMPLES } from "./ui/examples";
@@ -61,7 +62,7 @@ onBeforeUnmount(() => {
 
     <header class="site-header">
       <a class="brand" href="#" aria-label="矩阵研习室首页">
-        <span class="brand__mark" aria-hidden="true"><Grid2X2 :size="21" /></span>
+        <span class="brand__mark" aria-hidden="true"><BrandIcon :size="20" /></span>
         <span class="brand__text"><strong>矩阵研习室</strong></span>
       </a>
 
@@ -149,7 +150,7 @@ onBeforeUnmount(() => {
     </main>
 
     <footer class="site-footer">
-      <div class="site-footer__brand"><Grid2X2 :size="15" /><span>矩阵研习室 · Exact Rational Engine</span></div>
+      <div class="site-footer__brand"><BrandIcon :size="14" /><span>矩阵研习室 · Exact Rational Engine</span></div>
       <button
         v-tooltip.top="'Click 3 times'"
         class="footer-signature"
