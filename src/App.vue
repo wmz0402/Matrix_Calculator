@@ -2,7 +2,7 @@
 import { onBeforeUnmount, onMounted, ref } from "vue";
 import Button from "primevue/button";
 import Tag from "primevue/tag";
-import { ArrowUpRight, BookOpen, Github, Grid2X2, Moon, ShieldCheck, Sparkles, Sun } from "lucide-vue-next";
+import { ArrowUpRight, BookOpen, Github, Moon, ShieldCheck, Sparkles, Sun } from "lucide-vue-next";
 import MatrixEditor from "./components/MatrixEditor.vue";
 import OperationPanel from "./components/OperationPanel.vue";
 import ResultPanel from "./components/ResultPanel.vue";
