@@ -83,8 +83,8 @@ onBeforeUnmount(() => {
       <section class="hero-section">
         <div class="hero-section__copy">
           <div class="hero-section__eyebrow"><Sparkles :size="15" /> EXACT LINEAR ALGEBRA</div>
-          <h1>把矩阵算清楚，<br /><em>连过程也算明白。</em></h1>
-          <p>面向线性代数学习的精确计算工作台。分数不会被近似，消元的每一步都有迹可循。</p>
+          <h1>不只是算对答案，<br />更想让你<em>看懂每一步。</em></h1>
+          <p>一个干净的线代验算工具&mdash;&mdash;精确有理数，消元过程完完整整，不跳步。</p>
         </div>
         <div class="hero-section__proof" aria-label="产品特点">
           <div><strong>19</strong><span>种常用运算</span></div>
