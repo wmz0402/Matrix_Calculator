@@ -387,10 +387,10 @@
     margin: 0;
     color: var(--ink);
     font-family: var(--serif);
-    font-size: clamp(42px, 5.6vw, 74px);
+    font-size: clamp(42px, 5.6vw, 72px);
     font-weight: 600;
-    line-height: 1.1;
-    letter-spacing: -0.045em;
+    line-height: 1.25;
+    letter-spacing: 0.04em;
   }
 
   .hero-section h1 em {
@@ -461,8 +461,8 @@
     gap: 9px;
     padding: 0 24px;
     color: var(--ink-soft);
-    font-size: 12px;
-    font-weight: 750;
+    font-size: 13px;
+    font-weight: 600;
     white-space: nowrap;
   }
 
@@ -491,15 +491,15 @@
   }
 
   .example-chip strong {
-    font-size: 12px;
-    font-weight: 750;
+    font-size: 13px;
+    font-weight: 600;
   }
 
   .example-chip small {
     overflow: hidden;
-    margin-top: 3px;
+    margin-top: 4px;
     color: var(--muted);
-    font-size: 10px;
+    font-size: 11px;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
@@ -725,7 +725,7 @@
     margin-bottom: 7px;
     color: #ef9a7a;
     font-family: var(--mono);
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 800;
     letter-spacing: 0.18em;
   }
@@ -749,13 +749,13 @@
   .operation-panel__heading p {
     margin: 3px 0 0;
     color: var(--console-muted);
-    font-size: 10px;
+    font-size: 12px;
   }
 
   .operation-panel__heading .p-tag {
     --p-tag-contrast-background: var(--console-tag-background);
     --p-tag-contrast-color: var(--console-tag-color);
-    font-size: 9px;
+    font-size: 10px;
     border: 1px solid var(--console-tag-border);
   }
 
@@ -763,7 +763,7 @@
     display: block;
     margin-bottom: 7px;
     color: var(--console-label);
-    font-size: 10px;
+    font-size: 12px;
     font-weight: 700;
     letter-spacing: 0.08em;
   }
@@ -802,7 +802,7 @@
 
   .operation-group-label {
     color: var(--muted);
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 800;
     letter-spacing: 0.08em;
   }
@@ -836,7 +836,7 @@
   .operation-preview p {
     margin: 8px 0 11px;
     color: var(--console-muted);
-    font-size: 11px;
+    font-size: 12.5px;
   }
 
   .operation-preview__route {
@@ -845,7 +845,7 @@
     justify-content: space-between;
     padding-top: 10px;
     color: var(--console-label);
-    font-size: 10px;
+    font-size: 12px;
     border-top: 1px solid var(--console-divider);
   }
 
@@ -894,7 +894,7 @@
     gap: 7px;
     margin-top: 16px;
     color: var(--console-shortcut);
-    font-size: 9px;
+    font-size: 11px;
   }
 
   .result-section {

@@ -14,7 +14,7 @@ const calculator = useCalculator();
 const { theme, toggleTheme } = useTheme();
 const blueprintActive = ref(false);
 let signatureClicks = 0;
-let blueprintTimer: number | undefined;
+let blueprintTimer: any;
 
 async function calculateAndReveal(): Promise<void> {
   await calculator.runCalculation();
@@ -62,7 +62,7 @@ onBeforeUnmount(() => {
     <header class="site-header">
       <a class="brand" href="#" aria-label="矩阵研习室首页">
         <span class="brand__mark" aria-hidden="true"><Grid2X2 :size="21" /></span>
-        <span class="brand__text"><strong>矩阵研习室</strong><small>Matrix Atelier</small></span>
+        <span class="brand__text"><strong>矩阵研习室</strong></span>
       </a>
 
       <div class="site-header__actions">
@@ -83,8 +83,8 @@ onBeforeUnmount(() => {
       <section class="hero-section">
         <div class="hero-section__copy">
           <div class="hero-section__eyebrow"><Sparkles :size="15" /> EXACT LINEAR ALGEBRA</div>
-          <h1>不只是算对答案，<br />更想让你<em>看懂每一步。</em></h1>
-          <p>一个干净的线代验算工具&mdash;&mdash;精确有理数，消元过程完完整整，不跳步。</p>
+          <h1>矩阵有序，<br />推演<em>有迹。</em></h1>
+          <p>面向线性代数学习的精确计算工具，保留分数与完整推导过程。</p>
         </div>
         <div class="hero-section__proof" aria-label="产品特点">
           <div><strong>19</strong><span>种常用运算</span></div>
